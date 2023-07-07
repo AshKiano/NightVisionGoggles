@@ -16,10 +16,21 @@ public class GogglesCommand implements CommandExecutor {
     public static final String GOGGLES_NAME = "Night Vision Goggles";
     public static final String GOGGLES_LORE = ChatColor.GRAY + "Night vision goggles";
 
+    private String permission;
+
+    public GogglesCommand(String permission) {
+        this.permission = permission;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
+
+            if (!player.hasPermission(permission)) {
+                player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                return true;
+            }
 
             ItemStack goggles = new ItemStack(Material.LEATHER_HELMET);
             ItemMeta meta = goggles.getItemMeta();

@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 //TODO udělat nastavitelné lore
 //TODO přidat craftící recept
 //TODO přidat vustom materiál na příkaz
+//TODO hrac o efekt mozna neprijde když umře, ale tím si nejsem jistý, třeba otestovat
 public class NightVisionGoggles extends JavaPlugin {
 
     @Override

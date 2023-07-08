@@ -16,7 +16,7 @@ public class NightVisionGoggles extends JavaPlugin {
     public void onEnable() {
         this.saveDefaultConfig();
         FileConfiguration config = this.getConfig();
-        permission = config.getString("command_permission", "default.permission");
+        permission = config.getString("command_permission", "nightvisiongoggles");
         this.getCommand("nightvisiongoggles").setExecutor(new GogglesCommand(permission));
         getServer().getPluginManager().registerEvents(new GogglesListener(this), this);
 

@@ -4,11 +4,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 //TODO přidat permisi na používání brýlí
-//TODO přidat metrics 18994
 //TODO udělat nastavitelný název
 //TODO udělat nastavitelné lore
 //TODO přidat craftící recept
-//TODO přidat vustom materiál na příkaz
+//TODO přidat custom materiál na příkaz
 public class NightVisionGoggles extends JavaPlugin {
 
     private String permission;
@@ -20,6 +19,8 @@ public class NightVisionGoggles extends JavaPlugin {
         permission = config.getString("command_permission", "default.permission");
         this.getCommand("nightvisiongoggles").setExecutor(new GogglesCommand(permission));
         getServer().getPluginManager().registerEvents(new GogglesListener(this), this);
+
+        Metrics metrics = new Metrics(this, 18994);
     }
 
     @Override

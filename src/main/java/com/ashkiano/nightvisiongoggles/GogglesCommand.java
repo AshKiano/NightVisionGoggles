@@ -8,18 +8,22 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 
 public class GogglesCommand implements CommandExecutor {
 
-    public static final String GOGGLES_NAME = "Night Vision Goggles";
+    public static String GOGGLES_NAME;
     public static final String GOGGLES_LORE = ChatColor.GRAY + "Night vision goggles";
 
     private String permission;
+    private JavaPlugin plugin;
 
-    public GogglesCommand(String permission) {
+    public GogglesCommand(String permission, JavaPlugin plugin) {
         this.permission = permission;
+        this.plugin = plugin;
+        GOGGLES_NAME = this.plugin.getConfig().getString("nightvisiongoggles-name", "Night Vision Goggles");
     }
 
     @Override

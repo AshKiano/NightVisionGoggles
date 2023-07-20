@@ -1,5 +1,5 @@
 name: NightVisionGoggles
-version: '1.3'
+version: '1.4'
 main: com.ashkiano.nightvisiongoggles.NightVisionGoggles
 api-version: '1.16'
 authors: [AshKiano]

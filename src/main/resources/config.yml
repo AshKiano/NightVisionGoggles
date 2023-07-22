@@ -1,2 +1,3 @@
 command_permission: 'nightvisiongoggles'
+use_permission: 'nightvisiongoggles.use'
 nightvisiongoggles-name: "Night Vision Goggles"

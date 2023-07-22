@@ -32,6 +32,7 @@ public class GogglesCommand implements CommandExecutor {
             Player player = (Player) sender;
 
             if (!player.hasPermission(permission)) {
+                //TODO udělat hlášku konfigurovatelnou
                 player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
                 return true;
             }

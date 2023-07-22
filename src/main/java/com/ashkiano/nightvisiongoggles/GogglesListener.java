@@ -1,6 +1,7 @@
 package com.ashkiano.nightvisiongoggles;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,9 +19,11 @@ import org.bukkit.potion.PotionEffectType;
 public class GogglesListener implements Listener {
 
     private final JavaPlugin plugin;
+    private String permission_use;
 
-    public GogglesListener(JavaPlugin plugin) {
+    public GogglesListener(JavaPlugin plugin, String permission) {
         this.plugin = plugin;
+        this.permission_use = permission;
     }
 
     @EventHandler
@@ -50,6 +53,11 @@ public class GogglesListener implements Listener {
     }
 
     private void checkForGoggles(Player player) {
+
+        if (!player.hasPermission(permission_use)) {
+            return;
+        }
+
         ItemStack helmet = player.getInventory().getHelmet();
 
         if (helmet != null && helmet.getType() == Material.LEATHER_HELMET) {

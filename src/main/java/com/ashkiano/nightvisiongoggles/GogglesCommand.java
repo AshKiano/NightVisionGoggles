@@ -1,6 +1,7 @@
 package com.ashkiano.nightvisiongoggles;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
@@ -39,6 +41,12 @@ public class GogglesCommand implements CommandExecutor {
 
             ItemStack goggles = new ItemStack(Material.LEATHER_HELMET);
             ItemMeta meta = goggles.getItemMeta();
+
+            if (meta instanceof LeatherArmorMeta) {
+                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) meta;
+                leatherArmorMeta.setColor(Color.LIME);
+                meta = leatherArmorMeta;
+            }
 
             if (meta == null) return false;
             meta.setDisplayName(GOGGLES_NAME);

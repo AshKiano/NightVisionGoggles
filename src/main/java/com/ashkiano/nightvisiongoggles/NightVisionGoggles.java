@@ -3,7 +3,6 @@ package com.ashkiano.nightvisiongoggles;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-//TODO udělat nastavitelné lore
 //TODO přidat craftící recept
 //TODO přidat custom materiál na příkaz
 public class NightVisionGoggles extends JavaPlugin {

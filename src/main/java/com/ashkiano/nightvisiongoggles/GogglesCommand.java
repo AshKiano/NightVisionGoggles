@@ -17,7 +17,7 @@ import java.util.Arrays;
 public class GogglesCommand implements CommandExecutor {
 
     public static String GOGGLES_NAME;
-    public static final String GOGGLES_LORE = ChatColor.GRAY + "Night vision goggles";
+    public static String GOGGLES_LORE;
 
     private String permission;
     private JavaPlugin plugin;
@@ -26,6 +26,7 @@ public class GogglesCommand implements CommandExecutor {
         this.permission = permission;
         this.plugin = plugin;
         GOGGLES_NAME = this.plugin.getConfig().getString("nightvisiongoggles-name", "Night Vision Goggles");
+        GOGGLES_LORE = ChatColor.GRAY + this.plugin.getConfig().getString("nightvisiongoggles-lore", "Night vision goggles");
     }
 
     @Override

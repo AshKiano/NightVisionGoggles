@@ -3,6 +3,7 @@ package com.ashkiano.nightvisiongoggles;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+//TODO přidat brýlím nezničitelnost
 //TODO přidat craftící recept
 //TODO přidat custom materiál na příkaz
 public class NightVisionGoggles extends JavaPlugin {
@@ -20,6 +21,8 @@ public class NightVisionGoggles extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GogglesListener(this, permission_use), this);
 
         Metrics metrics = new Metrics(this, 18994);
+
+        System.out.println("Thank you for using the NightVisionGoggles plugin! If you enjoy using this plugin, please consider making a donation to support the development. You can donate at: https://paypal.me/josefvyskocil");
     }
 
     @Override

@@ -16,6 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Objects;
+
 public class GogglesListener implements Listener {
 
     private final JavaPlugin plugin;
@@ -73,7 +75,9 @@ public class GogglesListener implements Listener {
         }
 
         if (player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            if (Objects.requireNonNull(player.getPotionEffect(PotionEffectType.NIGHT_VISION)).getDuration() > 820000) {
+                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            }
         }
     }
 }

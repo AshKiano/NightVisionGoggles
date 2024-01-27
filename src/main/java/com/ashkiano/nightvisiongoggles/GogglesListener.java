@@ -1,7 +1,6 @@
 package com.ashkiano.nightvisiongoggles;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -62,7 +61,7 @@ public class GogglesListener implements Listener {
 
         ItemStack helmet = player.getInventory().getHelmet();
 
-        if (helmet != null && helmet.getType() == Material.LEATHER_HELMET) {
+        if (helmet != null && (helmet.getType() == Material.LEATHER_HELMET || helmet.getType() == Material.PAPER)) {
             ItemMeta meta = helmet.getItemMeta();
 
             if (meta == null) return;

@@ -28,7 +28,7 @@ public class NightVisionGoggles extends JavaPlugin {
 
         Metrics metrics = new Metrics(this, 18994);
 
-        this.getLogger().info("Thank you for using the NightVisionGoggles plugin! If you enjoy using this plugin, please consider making a donation to support the development. You can donate at: https://paypal.me/josefvyskocil");
+        this.getLogger().info("Thank you for using the NightVisionGoggles plugin! If you enjoy using this plugin, please consider making a donation to support the development. You can donate at: https://donate.ashkiano.com");
 
         checkForUpdates();
     }

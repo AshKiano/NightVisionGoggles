@@ -1,64 +1,104 @@
 package com.ashkiano.nightvisiongoggles;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
+import com.ashkiano.nightvisiongoggles.util.GoggleUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.persistence.PersistentDataType;
 
-import java.util.Arrays;
+import java.util.HashMap;
 
 public class GogglesCommand implements CommandExecutor {
 
-    public static String GOGGLES_NAME;
-    public static String GOGGLES_LORE;
+    private NightVisionGoggles plugin;
 
-    private String permission;
-    private JavaPlugin plugin;
-
-    public GogglesCommand(String permission, JavaPlugin plugin) {
-        this.permission = permission;
+    public GogglesCommand(NightVisionGoggles plugin) {
         this.plugin = plugin;
-        GOGGLES_NAME = this.plugin.getConfig().getString("nightvisiongoggles-name", "Night Vision Goggles");
-        GOGGLES_LORE = ChatColor.GRAY + this.plugin.getConfig().getString("nightvisiongoggles-lore", "Night vision goggles");
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-
-            if (!player.hasPermission(permission)) {
-                //TODO udělat hlášku konfigurovatelnou
-                player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+        if (!(sender instanceof Player)) {
+            if (args.length == 0) {
+                sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Console-Command.Usage")));
                 return true;
             }
 
-            ItemStack goggles = new ItemStack(Material.LEATHER_HELMET);
-            ItemMeta meta = goggles.getItemMeta();
+            Player target = Bukkit.getPlayer(args[0]);
 
-            if (meta instanceof LeatherArmorMeta) {
-                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) meta;
-                leatherArmorMeta.setColor(Color.LIME);
-                meta = leatherArmorMeta;
+            if (target == null) {
+                sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Console-Command.Invalid-Player")));
+                return true;
             }
 
-            if (meta == null) return false;
-            meta.setDisplayName(GOGGLES_NAME);
-            meta.setLore(Arrays.asList(GOGGLES_LORE));
-            goggles.setItemMeta(meta);
+            ItemStack goggleItem = GoggleUtils.getItemStackFromConfig(plugin.getConfig().getConfigurationSection("Goggles-Item"));
+            ItemMeta meta = goggleItem.getItemMeta();
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "goggles"), PersistentDataType.BOOLEAN, true);
+            goggleItem.setItemMeta(meta);
 
-            player.getInventory().addItem(goggles);
-
+            HashMap<Integer, ItemStack> leftOverItems = target.getInventory().addItem(goggleItem);
+            leftOverItems.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
+            sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Console-Command.Success").replace("%player%", target.getName())));
             return true;
         }
 
-        return false;
+        Player player = (Player) sender;
+
+        if (args.length == 0) {
+            if (!player.hasPermission(plugin.getConfig().getString("Permissions.Command"))) {
+                sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Player-Command.No-Permission")));
+                return true;
+            }
+
+            ItemStack goggleItem = GoggleUtils.getItemStackFromConfig(plugin.getConfig().getConfigurationSection("Goggles-Item"));
+            ItemMeta meta = goggleItem.getItemMeta();
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "goggles"), PersistentDataType.BOOLEAN, true);
+            goggleItem.setItemMeta(meta);
+            HashMap<Integer, ItemStack> leftOverItems = player.getInventory().addItem(goggleItem);
+            leftOverItems.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
+
+            player.getInventory().addItem(goggleItem);
+            sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Player-Command.Success")));
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("reload")) {
+            if (!player.hasPermission(plugin.getConfig().getString("Permissions.Reload"))) {
+                sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Player-Command.No-Permission")));
+                return true;
+            }
+
+            plugin.reloadConfig();
+            plugin.loadRecipe();
+            sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Reload.Success")));
+            return true;
+        }
+
+        if (!player.hasPermission(plugin.getConfig().getString("Permissions.Give-Other"))) {
+            sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Give-Other.No-Permission")));
+            return true;
+        }
+
+        Player target = Bukkit.getPlayer(args[0]);
+
+        if (target == null) {
+            sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Give-Other.Invalid-Player")));
+            return true;
+        }
+
+        ItemStack goggleItem = GoggleUtils.getItemStackFromConfig(plugin.getConfig().getConfigurationSection("Goggles-Item"));
+        ItemMeta meta = goggleItem.getItemMeta();
+        meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "goggles"), PersistentDataType.BOOLEAN, true);
+        goggleItem.setItemMeta(meta);
+
+        HashMap<Integer, ItemStack> leftOverItems = target.getInventory().addItem(goggleItem);
+        leftOverItems.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
+        sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Give-Other.Success").replace("%player%", target.getName())));
+        return true;
     }
 }

@@ -1,8 +1,9 @@
 name: NightVisionGoggles
 version: '${project.version}'
 main: com.ashkiano.nightvisiongoggles.NightVisionGoggles
-api-version: '1.16'
-authors: [AshKiano]
+api-version: '1.20'
+authors: [ AshKiano, BitByLogic ]
 commands:
   nightvisiongoggles:
-    description: Gives the player a pair of night vision goggles
+    aliases: [ "nvg" ]
+    description: Give the player a pair of goggles, or reload the config!

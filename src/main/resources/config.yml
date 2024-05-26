@@ -1,4 +1,58 @@
-command_permission: 'nightvisiongoggles'
-use_permission: 'nightvisiongoggles.use'
-nightvisiongoggles-name: "Night Vision Goggles"
-nightvisiongoggles-lore: "Turn night into day using these glasses."
+# Permission Configuration
+Permissions:
+  Command: "nightvisiongoggles.command"
+  Use: "nightvisiongoggles.use"
+  Reload: "nightvisiongoggles.reload"
+  Give-Other: "nightvisiongoggles.giveother"
+
+# Goggles Item Configuration
+Goggles-Item:
+  Material: "LEATHER_HELMET"
+  Unbreakable: true
+  Dye-Color: "#bfff00"
+  Name: "&aNight Vision Goggles"
+  Lore:
+    - "&7Turn night into day using these goggles!"
+
+# Crafting Recipe Configuration
+Goggle-Recipe:
+  # Recipe type, valid options are SHAPED or SHAPELESS
+  Type: "SHAPED"
+  # Represents a crafting table
+  #
+  # This is the shape of the recipe
+  # only required if it's a SHAPED recipe.
+  # MUST have the empty spaces, 3 strings in a 3x3x3 size!
+  # The shape key can only be a single character, such as P or H or I!
+  Shape:
+    - " P "
+    - " H "
+    - "   "
+  # Ingredients for the recipe.
+  # If recipe is SHAPED the key such as "P"
+  # or "H" must match the character above in the recipe.
+  Ingredients:
+    P:
+      Material: "POTION"
+      Potion-Data:
+        Type: "NIGHT_VISION"
+        Duration: "3600"
+        Amplifier: 1
+    H:
+      Material: "LEATHER_HELMET"
+
+# Message Configuration
+Messages:
+  Console-Command:
+    Usage: "&cUsage: /nvg <player> - Give a player night vision goggles."
+    Success: "&aSuccessfully gave %player% a pair of night vision goggles!"
+    Invalid-Player: "&cYou must provide a valid online player!"
+  Player-Command:
+    No-Permission: "&cYou don't have permission to use this command!"
+    Success: "&aYou have received a pair of night vision goggles!"
+  Reload:
+    Success: "&aSuccessfully reloaded configuration!"
+  Give-Other:
+    No-Permission: "&cYou don't have permission to use this command!"
+    Invalid-Player: "&cYou must provide a valid online player!"
+    Success: "&aSuccessfully gave %player% a pair of night vision goggles!"

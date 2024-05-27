@@ -55,7 +55,9 @@ public class GoggleUtils {
         meta.setLore(lore);
 
         // Add flags to hide potion effects/attributes
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ATTRIBUTES);
+        section.getStringList("Flags").forEach(flag -> {
+            meta.addItemFlags(ItemFlag.valueOf(flag.toUpperCase()));
+        });
 
         if (section.getBoolean("Unbreakable")) {
             meta.setUnbreakable(true);
@@ -67,6 +69,8 @@ public class GoggleUtils {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 
+        stack.setItemMeta(meta);
+
         // If leather armor, apply dye color if defined
         if (stack.getType().name().startsWith("LEATHER_") && section.getString("Dye-Color") != null) {
             LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) stack.getItemMeta();
@@ -75,17 +79,22 @@ public class GoggleUtils {
             stack.setItemMeta(leatherArmorMeta);
         }
 
-        stack.setItemMeta(meta);
-
         // If the item is a potion, apply potion data
         if (stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.POTION) {
             ConfigurationSection potionSection = section.getConfigurationSection("Potion-Data");
 
             if (potionSection != null) {
-                PotionMeta potionMeta = (PotionMeta) meta;
-                PotionEffectType type = PotionEffectType.getByName(potionSection.getString("Type", "POISON"));
-                potionMeta.addCustomEffect(new PotionEffect(type, potionSection.getInt("Duration", 20), potionSection.getInt("Amplifier", 1) - 1), true);
-                stack.setItemMeta(meta);
+                boolean vanilla = potionSection.getBoolean("Vanilla", false);
+                PotionMeta potionMeta = (PotionMeta) stack.getItemMeta();
+                String potionType = potionSection.getString("Type", "POISON");
+
+                if (vanilla) {
+                    potionMeta.setBasePotionData(new PotionData(PotionType.valueOf(potionType), potionSection.getBoolean("Extended", false), potionSection.getBoolean("Upgraded", false)));
+                } else {
+                    potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.getByName(potionType), potionSection.getInt("Duration", 20), potionSection.getInt("Amplifier", 1) - 1), true);
+                }
+
+                stack.setItemMeta(potionMeta);
             }
         }
 

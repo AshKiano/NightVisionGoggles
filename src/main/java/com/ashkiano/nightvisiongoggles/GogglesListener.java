@@ -57,13 +57,8 @@ public class GogglesListener implements Listener {
 
         ItemStack helmet = player.getInventory().getHelmet();
 
-        if (helmet == null) {
-            return;
-        }
-
-        ItemMeta meta = helmet.getItemMeta();
-
-        if (meta == null || !meta.getPersistentDataContainer().has(new NamespacedKey(plugin, "goggles"), PersistentDataType.BOOLEAN)) {
+        if (helmet == null || helmet.getItemMeta() == null ||
+                !helmet.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "goggles"), PersistentDataType.BOOLEAN)) {
             if (!player.hasPotionEffect(PotionEffectType.NIGHT_VISION) || !player.getPotionEffect(PotionEffectType.NIGHT_VISION).isInfinite()) {
                 return;
             }
@@ -71,6 +66,8 @@ public class GogglesListener implements Listener {
             player.removePotionEffect(PotionEffectType.NIGHT_VISION);
             return;
         }
+
+        ItemMeta meta = helmet.getItemMeta();
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, -1, 0, false, false, false));
     }

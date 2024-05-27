@@ -59,10 +59,9 @@ public class GogglesCommand implements CommandExecutor {
             ItemMeta meta = goggleItem.getItemMeta();
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "goggles"), PersistentDataType.BOOLEAN, true);
             goggleItem.setItemMeta(meta);
+
             HashMap<Integer, ItemStack> leftOverItems = player.getInventory().addItem(goggleItem);
             leftOverItems.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
-
-            player.getInventory().addItem(goggleItem);
             sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Player-Command.Success")));
             return true;
         }
@@ -75,6 +74,7 @@ public class GogglesCommand implements CommandExecutor {
 
             plugin.reloadConfig();
             plugin.loadRecipe();
+
             sender.sendMessage(GoggleUtils.color(plugin.getConfig().getString("Messages.Reload.Success")));
             return true;
         }

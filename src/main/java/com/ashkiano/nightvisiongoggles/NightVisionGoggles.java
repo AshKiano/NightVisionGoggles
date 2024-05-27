@@ -19,6 +19,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+//TODO přidat nastavení, že půjde vypnout craftící recept jednou proměnnou v configu
+//TODO givuje brýle dvakrát na příkaz a po sundání brýlí se neodebere nekonečný nightvision efekt
 public class NightVisionGoggles extends JavaPlugin {
 
     @Override

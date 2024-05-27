@@ -1,3 +1,6 @@
+# Whether to show the donation message on enable
+Donation-Message: true
+
 # Permission Configuration
 Permissions:
   Command: "nightvisiongoggles.command"
@@ -16,6 +19,8 @@ Goggles-Item:
 
 # Crafting Recipe Configuration
 Goggle-Recipe:
+  # Whether the recipe should be enabled
+  Enabled: true
   # Recipe type, valid options are SHAPED or SHAPELESS
   Type: "SHAPED"
   # Represents a crafting table
@@ -35,9 +40,10 @@ Goggle-Recipe:
     P:
       Material: "POTION"
       Potion-Data:
+        Vanilla: true # Whether it's a vanilla potion or not
         Type: "NIGHT_VISION"
-        Duration: "3600"
-        Amplifier: 1
+        Extended: false # If it's an extended potion
+        Upgraded: false # If it's an upgraded potion
     H:
       Material: "LEATHER_HELMET"
 

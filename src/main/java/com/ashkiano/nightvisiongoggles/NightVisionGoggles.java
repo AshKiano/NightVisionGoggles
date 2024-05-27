@@ -2,6 +2,7 @@ package com.ashkiano.nightvisiongoggles;
 
 import com.ashkiano.nightvisiongoggles.util.GoggleUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -19,8 +20,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-//TODO přidat nastavení, že půjde vypnout craftící recept jednou proměnnou v configu
-//TODO givuje brýle dvakrát na příkaz a po sundání brýlí se neodebere nekonečný nightvision efekt
 public class NightVisionGoggles extends JavaPlugin {
 
     @Override
@@ -32,11 +31,21 @@ public class NightVisionGoggles extends JavaPlugin {
 
         new Metrics(this, 18994);
 
-        getLogger().info("Thank you for using the NightVisionGoggles plugin! If you enjoy using this plugin," +
-                " please consider making a donation to support the development. You can donate at: https://donate.ashkiano.com");
-
         checkForUpdates();
         loadRecipe();
+
+        if (!getConfig().getBoolean("Donation-Message", true)) {
+            return;
+        }
+
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            Bukkit.getConsoleSender().sendMessage(
+                    ChatColor.GOLD + "Thank you for using the NightVisionGoggles plugin!",
+                    ChatColor.GOLD + "If you enjoy using this plugin!",
+                    ChatColor.GOLD + "Please consider making a donation to support the development!",
+                    ChatColor.GOLD + "You can donate at: " + ChatColor.GREEN + "https://donate.ashkiano.com"
+            );
+        }, 20);
     }
 
     public void loadRecipe() {
@@ -53,11 +62,11 @@ public class NightVisionGoggles extends JavaPlugin {
 
         ConfigurationSection recipeSection = getConfig().getConfigurationSection("Goggle-Recipe");
 
-        if (recipeSection == null) {
+        if (recipeSection == null || !recipeSection.getBoolean("Enabled")) {
             return;
         }
 
-        String recipeType = recipeSection.getString("Recipe-Type", "SHAPELESS");
+        String recipeType = recipeSection.getString("Type", "SHAPELESS");
 
         switch (recipeType) {
             case "SHAPED":

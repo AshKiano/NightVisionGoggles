@@ -1,7 +1,7 @@
 package com.ashkiano.nightvisiongoggles;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,28 +11,25 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Objects;
-
 public class GogglesListener implements Listener {
 
-    private final JavaPlugin plugin;
-    private String permission_use;
+    private final NightVisionGoggles plugin;
 
-    public GogglesListener(JavaPlugin plugin, String permission) {
+    public GogglesListener(NightVisionGoggles plugin) {
         this.plugin = plugin;
-        this.permission_use = permission;
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player) {
-            Player player = (Player) event.getWhoClicked();
-            Bukkit.getScheduler().runTaskLater(this.plugin, () -> checkForGoggles(player), 1L);
+        if (!(event.getWhoClicked() instanceof Player)) {
+            return;
         }
+
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> checkForGoggles((Player) event.getWhoClicked()), 1L);
     }
 
     @EventHandler
@@ -54,29 +51,27 @@ public class GogglesListener implements Listener {
     }
 
     private void checkForGoggles(Player player) {
-
-        if (!player.hasPermission(permission_use)) {
+        if (!player.hasPermission(plugin.getConfig().getString("Permissions.Use"))) {
             return;
         }
 
         ItemStack helmet = player.getInventory().getHelmet();
 
-        if (helmet != null && (helmet.getType() == Material.LEATHER_HELMET || helmet.getType() == Material.PAPER)) {
-            ItemMeta meta = helmet.getItemMeta();
+        if (helmet == null) {
+            return;
+        }
 
-            if (meta == null) return;
-            if (meta.hasLore() && meta.getLore().contains(GogglesCommand.GOGGLES_LORE)) {
-                if (!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false, false));
-                }
+        ItemMeta meta = helmet.getItemMeta();
+
+        if (meta == null || !meta.getPersistentDataContainer().has(new NamespacedKey(plugin, "goggles"), PersistentDataType.BOOLEAN)) {
+            if (!player.hasPotionEffect(PotionEffectType.NIGHT_VISION) || !player.getPotionEffect(PotionEffectType.NIGHT_VISION).isInfinite()) {
                 return;
             }
+
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            return;
         }
 
-        if (player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-            if (Objects.requireNonNull(player.getPotionEffect(PotionEffectType.NIGHT_VISION)).getDuration() > 820000) {
-                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            }
-        }
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, -1, 0, false, false, false));
     }
 }

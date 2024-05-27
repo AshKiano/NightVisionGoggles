@@ -1,8 +1,0 @@
-name: NightVisionGoggles
-version: '1.13'
-main: com.ashkiano.nightvisiongoggles.NightVisionGoggles
-api-version: '1.16'
-authors: [AshKiano]
-commands:
-  nightvisiongoggles:
-    description: Gives the player a pair of night vision goggles
